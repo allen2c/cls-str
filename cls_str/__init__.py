@@ -13,8 +13,8 @@ def cls_to_str(cls: typing.Type) -> str:
     """
     Convert a class object to its fully qualified name (FQN) string.
 
-    If the class is defined in the __main__ module, a warning will be issued.
-    """
+    If the class is defined in the __main__ module or as a local class, a warning will be issued.
+    """  # noqa: E501
     module_name = cls.__module__
     qual_name = cls.__qualname__
 
@@ -24,6 +24,14 @@ def cls_to_str(cls: typing.Type) -> str:
             f"Class '{qual_name}' is defined in the '__main__' module. "
             f"The generated path '__main__.{qual_name}' cannot be "
             "reliably imported from another independent script or process."
+        )
+
+    # Check for local class (defined inside a function)
+    if "<locals>" in qual_name:
+        logger.warning(
+            f"Class '{qual_name}' is defined as a local class (inside a function). "
+            f"The generated path '{module_name}.{qual_name}' cannot be "
+            "imported because local classes are not accessible from the module level."
         )
 
     return f"{module_name}.{qual_name}"

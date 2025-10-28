@@ -23,12 +23,13 @@ def test_cls_str_1_normal_importable_class():
     print("  Validation successful (is): True\n")
 
 
+class Outer:
+    class Inner:
+        pass
+
+
 def test_cls_str_2_nested_class():
     print("--- Example 2: Nested Class ---")
-
-    class Outer:
-        class Inner:
-            pass
 
     original_class_2 = Outer.Inner
 
